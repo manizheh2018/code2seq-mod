@@ -4,7 +4,8 @@ import time
 
 import numpy as np
 import shutil
-import tensorflow as tf
+#import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 import reader
 from common import Common
