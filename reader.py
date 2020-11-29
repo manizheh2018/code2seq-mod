@@ -1,5 +1,5 @@
 import os
-
+%tensorflow_version 1.x
 import tensorflow as tf
 
 from common import Common
