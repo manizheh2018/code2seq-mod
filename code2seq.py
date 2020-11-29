@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 import numpy as np
+%tensorflow_version 1.x
 import tensorflow as tf
 
 from config import Config
