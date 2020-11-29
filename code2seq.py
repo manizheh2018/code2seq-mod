@@ -27,8 +27,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     np.random.seed(args.seed)
-    #tf.set_random_seed(args.seed)
-    tf.random.set_seed(args.seed)
+    tf.set_random_seed(args.seed)
+    #tf.random.set_seed(args.seed)
 
     if args.debug:
         config = Config.get_debug_config(args)
