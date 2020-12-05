@@ -58,7 +58,41 @@ class Model:
 
     def close_session(self):
         self.sess.close()
+###########################
+def train1(self):
+        print('Starting training')
+        start_time = time.time()
 
+        batch_num = 0
+        sum_loss = 0
+        best_f1 = 0
+        best_epoch = 0
+        best_f1_precision = 0
+        best_f1_recall = 0
+        epochs_no_improve = 0
+
+        self.queue_thread = reader.Reader(subtoken_to_index=self.subtoken_to_index,
+                                          node_to_index=self.node_to_index,
+                                          target_to_index=self.target_to_index,
+                                          config=self.config)
+        optimizer, train_loss = self.build_training_graph(self.queue_thread.get_output())
+        self.print_hyperparams()
+        print('Number of trainable params:',
+              np.sum([np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()]))
+        self.initialize_session_variables(self.sess)
+        print('Initalized variables')
+        if self.config.LOAD_PATH:
+            self.load_model(self.sess)
+
+        
+
+        if self.config.SAVE_PATH:
+            self.save_model(self.sess, self.config.SAVE_PATH + '.final')
+            print('Model saved in file: %s' % self.config.SAVE_PATH)
+
+        elapsed = int(time.time() - start_time)
+        print("Training time: %sh%sm%ss\n" % ((elapsed // 60 // 60), (elapsed // 60) % 60, elapsed % 60))
+############################
     def train(self):
         print('Starting training')
         start_time = time.time()
