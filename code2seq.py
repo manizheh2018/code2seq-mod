@@ -42,7 +42,7 @@ if __name__ == '__main__':
     ###GA
     varbound=np.array([[0,10]]*3)
     modelga=ga(function=f,dimension=3,variable_type='real',variable_boundaries=varbound)
-    modelga.run()
+    #modelga.run()
     #############
     
     model = Model(config)
