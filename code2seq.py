@@ -7,7 +7,8 @@ from geneticalgorithm import geneticalgorithm as ga
 from config import Config
 from interactive_predict import InteractivePredictor
 from model import Model
-
+def f(X):
+    return np.sum(X)
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument("-d", "--data", dest="data_path",
@@ -59,5 +60,4 @@ if __name__ == '__main__':
     if args.release and args.load_path:
         model.evaluate(release=True)
     model.close_session()
-def f(X):
-    return np.sum(X)
+
