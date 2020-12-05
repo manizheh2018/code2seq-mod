@@ -14,7 +14,7 @@ def evaluate_each_indiv(model,config):
     #if config.TRAIN_PATH:
      #   model.train()
     if args.data_path:
-        results, precision, recall, f1, rouge = model.evaluate()
+        results, precision, recall, f1, rouge = model.evaluate1()
         print('Accuracy: ' + str(results))
         print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
         print('Rouge: ', rouge)
