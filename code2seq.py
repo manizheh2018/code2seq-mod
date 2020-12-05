@@ -24,9 +24,9 @@ def evaluate_each_indiv(model,config):
       #  predictor.predict()
    # if args.release and args.load_path:
      #   model.evaluate(release=True)
-    print("i have finished f1111111111111111111111111111111")
+    print("i have finished Accuracyyyyyyyyy")
     model.close_session()
-    return f1
+    return results
 
 #################################################
 if __name__ == '__main__':
@@ -68,9 +68,9 @@ if __name__ == '__main__':
     model = Model(config)
     print("eheeeeeeeeeeeeeeeeeeeeeeee\n")
     
-    #aa=evaluate_each_indiv(model,config)
+    aa=evaluate_each_indiv(model,config)
     print("heyyyyyyyyyyyyyyyyy\n")
-    #print(aa)
+    print(aa)
     print('Created model')
     if config.TRAIN_PATH:
         model.train()
