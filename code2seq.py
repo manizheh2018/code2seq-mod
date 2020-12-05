@@ -1,4 +1,4 @@
-from argparse import ArgumentParser
+afrom argparse import ArgumentParser
 import numpy as np
 #%tensorflow_version 1.x
 import tensorflow as tf
@@ -7,8 +7,26 @@ from geneticalgorithm import geneticalgorithm as ga
 from config import Config
 from interactive_predict import InteractivePredictor
 from model import Model
-def f(X):
-    return np.sum(X)
+
+#################################################
+def evaluate_each_indiv(model,config):
+    if config.TRAIN_PATH:
+        model.train()
+    if config.TEST_PATH and not args.data_path:
+        results, precision, recall, f1, rouge = model.evaluate()
+        print('Accuracy: ' + str(results))
+        print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
+        print('Rouge: ', rouge)
+    if args.predict:
+        predictor = InteractivePredictor(config, model)
+        predictor.predict()
+    if args.release and args.load_path:
+        model.evaluate(release=True)
+    
+    model.close_session()
+    return f1
+
+#################################################
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument("-d", "--data", dest="data_path",
@@ -40,12 +58,15 @@ if __name__ == '__main__':
         config = Config.get_default_config(args)
     print(config.BATCH_SIZE)
     ###GA
-    varbound=np.array([[0,10]]*3)
-    modelga=ga(function=f,dimension=3,variable_type='real',variable_boundaries=varbound)
+    #varbound=np.array([[0,10]]*3)
+    #modelga=ga(function=f,dimension=3,variable_type='real',variable_boundaries=varbound)
     #modelga.run()
     #############
     
     model = Model(config)
+    aa=evaluate_each_indiv(model,config)
+    print("heyyyyyyyyyyyyyyyyy\n")
+    print(aa)
     print('Created model')
     if config.TRAIN_PATH:
         model.train()
