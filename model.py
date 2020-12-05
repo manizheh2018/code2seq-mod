@@ -59,7 +59,7 @@ class Model:
     def close_session(self):
         self.sess.close()
 ###########################
-def train1(self):
+    def train1(self):
         print('Starting training')
         start_time = time.time()
 
