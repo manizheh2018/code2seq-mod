@@ -2,7 +2,8 @@ from argparse import ArgumentParser
 import numpy as np
 #%tensorflow_version 1.x
 import tensorflow as tf
-
+#import geneticalgorithm as ga
+from geneticalgorithm import geneticalgorithm as ga
 from config import Config
 from interactive_predict import InteractivePredictor
 from model import Model
@@ -36,7 +37,13 @@ if __name__ == '__main__':
         config = Config.get_debug_config(args)
     else:
         config = Config.get_default_config(args)
-
+    print(config.BATCH_SIZE)
+    ###GA
+    varbound=np.array([[0,10]]*3)
+    modelga=ga(function=f,dimension=3,variable_type='real',variable_boundaries=varbound)
+    modelga.run()
+    #############
+    
     model = Model(config)
     print('Created model')
     if config.TRAIN_PATH:
@@ -52,3 +59,5 @@ if __name__ == '__main__':
     if args.release and args.load_path:
         model.evaluate(release=True)
     model.close_session()
+def f(X):
+    return np.sum(X)
