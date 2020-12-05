@@ -4,10 +4,7 @@ import time
 
 import numpy as np
 import shutil
-#%tensorflow_version 1.x
 import tensorflow as tf
-#import tensorflow.compat.v1 as tf
-#tf.compat.v1.disable_eager_execution()
 
 import reader
 from common import Common
@@ -20,8 +17,7 @@ class Model:
 
     def __init__(self, config):
         self.config = config
-        #self.sess = tf.Session()
-        self.sess = tf.compat.v1.Session()
+        self.sess = tf.Session()
 
         self.eval_queue = None
         self.predict_queue = None
