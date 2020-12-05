@@ -13,17 +13,17 @@ def evaluate_each_indiv(model,config):
     print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     if config.TRAIN_PATH:
         model.train1()
-    if args.data_path:
+    #if args.data_path:
         results, precision, recall, f1, rouge = model.evaluate()
         print('Accuracy: ' + str(results))
         print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
         print('Rouge: ', rouge)
-    if args.predict:
-        predictor = InteractivePredictor(config, model)
-        predictor.predict()
-    if args.release and args.load_path:
-        model.evaluate(release=True)
-    
+    #if args.predict:
+    #    predictor = InteractivePredictor(config, model)
+      #  predictor.predict()
+   # if args.release and args.load_path:
+     #   model.evaluate(release=True)
+    print("i have finished f1111111111111111111111111111111")
     model.close_session()
     return f1
 
