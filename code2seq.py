@@ -11,14 +11,14 @@ from model import Model
 #################################################
 def evaluate_each_indiv(model,config):
     print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-    if config.TRAIN_PATH:
-        model.train1()
+    #if config.TRAIN_PATH:
+    model.train1()
     #if args.data_path:
-        results, precision, recall, f1, rouge = model.evaluate()
-        print("i am out of evaluate$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        print('Accuracy: ' + str(results))
-        print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
-        print('Rouge: ', rouge)
+    results, precision, recall, f1, rouge = model.evaluate()
+    print("i am out of evaluate$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+    print('Accuracy: ' + str(results))
+    print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
+    print('Rouge: ', rouge)
     #if args.predict:
     #    predictor = InteractivePredictor(config, model)
       #  predictor.predict()
