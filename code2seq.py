@@ -67,7 +67,7 @@ if __name__ == '__main__':
     model = Model(config)
     print("eheeeeeeeeeeeeeeeeeeeeeeee\n")
     
-    aa=evaluate_each_indiv(model,config)
+   # aa=evaluate_each_indiv(model,config)
     print("heyyyyyyyyyyyyyyyyy\n")
     print(aa)
     print('Created model')
