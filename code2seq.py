@@ -69,7 +69,7 @@ if __name__ == '__main__':
     
    # aa=evaluate_each_indiv(model,config)
     print("heyyyyyyyyyyyyyyyyy\n")
-    print(aa)
+    #print(aa)
     print('Created model')
     if config.TRAIN_PATH:
         model.train()
