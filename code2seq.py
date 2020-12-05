@@ -15,6 +15,7 @@ def evaluate_each_indiv(model,config):
         model.train1()
     #if args.data_path:
         results, precision, recall, f1, rouge = model.evaluate()
+        print("i am out of evaluate$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
         print('Accuracy: ' + str(results))
         print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
         print('Rouge: ', rouge)
