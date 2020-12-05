@@ -10,6 +10,7 @@ from model import Model
 
 #################################################
 def evaluate_each_indiv(model,config):
+    print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     if config.TRAIN_PATH:
         model.train()
     if config.TEST_PATH and not args.data_path:
@@ -64,6 +65,7 @@ if __name__ == '__main__':
     #############
     
     model = Model(config)
+    print("eheeeeeeeeeeeeeeeeeeeeeeee\n")
     aa=evaluate_each_indiv(model,config)
     print("heyyyyyyyyyyyyyyyyy\n")
     print(aa)
