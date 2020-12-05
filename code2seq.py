@@ -12,7 +12,7 @@ from model import Model
 def evaluate_each_indiv(model,config):
     print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     if config.TRAIN_PATH:
-        model.train()
+        model.train1()
     if args.data_path:
         results, precision, recall, f1, rouge = model.evaluate1()
         print('Accuracy: ' + str(results))
