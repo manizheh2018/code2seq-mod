@@ -12,7 +12,7 @@ from model import Model
 def evaluate_each_indiv(model,config,i):
     print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     #if config.TRAIN_PATH:
-    if i>0:
+    if i>0: #for the case where reuse is True inside GA
         model.train2()
         #if args.data_path:
         results, precision, recall, f1, rouge = model.evaluate()
@@ -20,7 +20,7 @@ def evaluate_each_indiv(model,config,i):
         print('Accuracy: ' + str(results))
         print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
         print('Rouge: ', rouge)
-    else:
+    else:#for the case where reuse is False inside GA-first indiv
         model.train1()
         #if args.data_path:
         results, precision, recall, f1, rouge = model.evaluate()
@@ -79,7 +79,7 @@ def initialize_pop(popsize,n_var,model,config):
       config.MAX_TARGET_PARTS=indiv[3]
       indiv[4]=evaluate_each_indiv(model,config,i)
       pop+=[indiv]
-      #print(indiv)
+      print("initialization finished")
     return pop
 ##################################################
 def mycross(pop,cross_p,popsize):
@@ -141,6 +141,7 @@ if __name__ == '__main__':
     n_var=4
     popsize=3
     pop=initialize_pop(popsize,n_var+1,model,config)
+    print(pop)
     n_iters=5
     p_mutate=0.3
     cross_p=0.7
@@ -149,8 +150,8 @@ if __name__ == '__main__':
       
    
     #aa=evaluate_each_indiv(model,config)
-    print("heyyyyyyyyyyyyyyyyy\n")
-    print("eheeeeeeeeeeeeeeeeeeeeeeee\n")
+    print("heyyyyyyyyyyyyyyyyy I am starting main train\n")
+    
     model = Model(config)
     print('Created model')
     if config.TRAIN_PATH:
