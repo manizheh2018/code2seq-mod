@@ -75,7 +75,7 @@ class Model:
                                           node_to_index=self.node_to_index,
                                           target_to_index=self.target_to_index,
                                           config=self.config)
-        optimizer, train_loss = self.build_training_graph(self.queue_thread.get_output())
+       # optimizer, train_loss = self.build_training_graph(self.queue_thread.get_output())
         #tf.variable_scope("SUBTOKENS_VOCAB", reuse = tf.AUTO_REUSE)
         self.print_hyperparams()
        # print('Number of trainable params:',
