@@ -78,7 +78,7 @@ def initialize_pop(popsize,n_var,config):
       config.RNN_SIZE =indiv[1]
       config.NUM_DECODER_LAYERS=indiv[2]
       config.MAX_TARGET_PARTS=indiv[3]
-      indiv[4]=evaluate_each_indiv(model,config,i)
+      indiv[4]=evaluate_each_indiv(config,i)
       pop+=[indiv]
       print("initialization finished")
     return pop
