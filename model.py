@@ -356,7 +356,8 @@ class Model:
                     false_negative += 1
         return true_positive, false_positive, false_negative
 
-    #def print_hyperparams(self):
+    def print_hyperparams(self):
+        print()
      #   print('Training batch size:\t\t\t', self.config.BATCH_SIZE)
      #   print('Dataset path:\t\t\t\t', self.config.TRAIN_PATH)
       #  print('Training file path:\t\t\t', self.config.TRAIN_PATH + '.train.c2s')
