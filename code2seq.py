@@ -37,7 +37,7 @@ def evaluate_each_indiv(config,i):
      #   model.evaluate(release=True)
     print("i have finished f111111111yyyyyyyyy")
     model.close_session()
-    return f1, model
+    return f1
 ####################################################
 def mymutate(indiv,ind):
     #va={64,128,256, 512}
