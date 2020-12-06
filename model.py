@@ -434,6 +434,7 @@ class Model:
             self.saver = tf.train.Saver(max_to_keep=10)
 
         return train_op, loss
+    ########################################
     def build_training_graph1(self, input_tensors):
         target_index = input_tensors[reader.TARGET_INDEX_KEY]
         target_lengths = input_tensors[reader.TARGET_LENGTH_KEY]
@@ -499,7 +500,7 @@ class Model:
                 train_op = optimizer.apply_gradients(zip(clipped_gradients, params))
 
             self.saver = tf.train.Saver(max_to_keep=10)
-
+        tf.variable_scope('model',reuse=True)
         return train_op, loss
 
     def decode_outputs(self, target_words_vocab, target_input, batch_size, batched_contexts, valid_mask,
