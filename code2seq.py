@@ -9,10 +9,11 @@ from interactive_predict import InteractivePredictor
 from model import Model
 
 #################################################
-def evaluate_each_indiv(config,i,model):
+def evaluate_each_indiv(config,i):
     
     print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     #if config.TRAIN_PATH:
+    model = Model(config)
     if i>0: #for the case where reuse is True inside GA
         model.train2()
         #if args.data_path:
@@ -47,6 +48,7 @@ def mymutate(indiv,ind):
     #myNumber_of_Decoder_layers: any value
     #myMax_target_length={1-10}
     #for i in range(len(indiv)):
+    model=
     if ind==0:
       d1=np.random.randint(0,high=4,dtype=int)
       indiv[0]=myTraining_batch_size[d1]
@@ -84,11 +86,11 @@ def initialize_pop(popsize,n_var,config):
       config.NUM_EPOCHS =indiv[1]
       #config.NUM_DECODER_LAYERS=indiv[2]
       config.MAX_TARGET_PARTS=indiv[2]
-      model = Model(config)
-      indiv[3]=evaluate_each_indiv(config,i,model)
+      #model = Model(config)
+      indiv[3]=evaluate_each_indiv(config,i)
       
       pop+=[indiv]
-      model.close_session()
+      #model.close_session()
     print("initialization finished")
     return pop
 ##################################################
