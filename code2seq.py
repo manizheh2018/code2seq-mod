@@ -9,7 +9,7 @@ from interactive_predict import InteractivePredictor
 from model import Model
 
 #################################################
-def evaluate_each_indiv(config,i):
+def evaluate_each_indiv(config,i,model):
     
     print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     #if config.TRAIN_PATH:
@@ -80,7 +80,7 @@ def initialize_pop(popsize,n_var,config):
       config.NUM_DECODER_LAYERS=indiv[2]
       config.MAX_TARGET_PARTS=indiv[3]
       model = Model(config)
-      indiv[4]=evaluate_each_indiv(config,i)
+      indiv[4]=evaluate_each_indiv(config,i,model)
       
       pop+=[indiv]
       model.close_session()
