@@ -3,7 +3,7 @@ import numpy as np
 #%tensorflow_version 1.x
 import tensorflow as tf
 #import geneticalgorithm as ga
-from geneticalgorithm import geneticalgorithm as ga
+#from geneticalgorithm import geneticalgorithm as ga
 from config import Config
 from interactive_predict import InteractivePredictor
 from model import Model
