@@ -10,7 +10,7 @@ from model import Model
 
 #################################################
 def evaluate_each_indiv(config,i):
-    model = Model(config)
+    
     print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     #if config.TRAIN_PATH:
     if i>0: #for the case where reuse is True inside GA
@@ -67,6 +67,7 @@ def initialize_pop(popsize,n_var,config):
     #myMax_target_length={1-10}
     pop=[]
     for i in range(popsize):
+      
       indiv=[0]*n_var
       d1=np.random.randint(0,high=4,dtype=int)
       b1=np.random.randint(0,high=5,dtype=int)
@@ -78,9 +79,12 @@ def initialize_pop(popsize,n_var,config):
       config.RNN_SIZE =indiv[1]
       config.NUM_DECODER_LAYERS=indiv[2]
       config.MAX_TARGET_PARTS=indiv[3]
+      model = Model(config)
       indiv[4]=evaluate_each_indiv(config,i)
+      
       pop+=[indiv]
-      print("initialization finished")
+      model.close_session()
+    print("initialization finished")
     return pop
 ##################################################
 def mycross(pop,cross_p,popsize):
