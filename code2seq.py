@@ -9,7 +9,8 @@ from interactive_predict import InteractivePredictor
 from model import Model
 
 #################################################
-def evaluate_each_indiv(model,config,i):
+def evaluate_each_indiv(config,i):
+    model = Model(config)
     print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     #if config.TRAIN_PATH:
     if i>0: #for the case where reuse is True inside GA
@@ -135,20 +136,17 @@ if __name__ == '__main__':
     #modelga=ga(function=f,dimension=3,variable_type='real',variable_boundaries=varbound)
     #modelga.run()
     #############
-    
-    model = Model(config)
+
     pop=[]
     n_var=4
     popsize=3
-    pop=initialize_pop(popsize,n_var+1,model,config)
+    pop=initialize_pop(popsize,n_var+1,config)
     print(pop)
     n_iters=5
     p_mutate=0.3
     cross_p=0.7
 
-    
       
-   
     #aa=evaluate_each_indiv(model,config)
     print("heyyyyyyyyyyyyyyyyy I am starting main train\n")
     
