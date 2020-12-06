@@ -93,6 +93,41 @@ class Model:
 
         elapsed = int(time.time() - start_time)
         print("Training time: %sh%sm%ss\n" % ((elapsed // 60 // 60), (elapsed // 60) % 60, elapsed % 60))
+  ################################################      
+    def train2(self):
+        print('Starting training')
+        start_time = time.time()
+
+        batch_num = 0
+        sum_loss = 0
+        best_f1 = 0
+        best_epoch = 0
+        best_f1_precision = 0
+        best_f1_recall = 0
+        epochs_no_improve = 0
+
+        self.queue_thread = reader.Reader(subtoken_to_index=self.subtoken_to_index,
+                                          node_to_index=self.node_to_index,
+                                          target_to_index=self.target_to_index,
+                                          config=self.config)
+        optimizer, train_loss = self.build_training_graph(self.queue_thread.get_output())
+        #tf.variable_scope("SUBTOKENS_VOCAB", reuse = tf.AUTO_REUSE)
+        self.print_hyperparams()
+       # print('Number of trainable params:',
+          #    np.sum([np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()]))
+        self.initialize_session_variables(self.sess)
+        #print('Initalized variables')
+        #if self.config.LOAD_PATH:
+          #  self.load_model(self.sess)
+
+        
+
+        #if self.config.SAVE_PATH:
+         #   self.save_model(self.sess, self.config.SAVE_PATH + '.final')
+         #   print('Model saved in file: %s' % self.config.SAVE_PATH)
+
+        elapsed = int(time.time() - start_time)
+        print("Training time: %sh%sm%ss\n" % ((elapsed // 60 // 60), (elapsed // 60) % 60, elapsed % 60))
 ############################
     def train(self):
         print('Starting training')
@@ -500,7 +535,7 @@ class Model:
                 train_op = optimizer.apply_gradients(zip(clipped_gradients, params))
 
             self.saver = tf.train.Saver(max_to_keep=10)
-        tf.variable_scope('model',reuse=True)
+        
         return train_op, loss
 
     def decode_outputs(self, target_words_vocab, target_input, batch_size, batched_contexts, valid_mask,
