@@ -48,7 +48,7 @@ def mymutate(indiv,ind):
     #myNumber_of_Decoder_layers: any value
     #myMax_target_length={1-10}
     #for i in range(len(indiv)):
-    model=
+    
     if ind==0:
       d1=np.random.randint(0,high=4,dtype=int)
       indiv[0]=myTraining_batch_size[d1]
