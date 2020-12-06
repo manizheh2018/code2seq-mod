@@ -76,6 +76,7 @@ class Model:
                                           target_to_index=self.target_to_index,
                                           config=self.config)
         optimizer, train_loss = self.build_training_graph(self.queue_thread.get_output())
+        #tf.variable_scope("SUBTOKENS_VOCAB", reuse = tf.AUTO_REUSE)
         self.print_hyperparams()
        # print('Number of trainable params:',
           #    np.sum([np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()]))
@@ -383,7 +384,7 @@ class Model:
                                              dtype=tf.float32,
                                              initializer=tf.contrib.layers.variance_scaling_initializer(factor=1.0,
                                                                                                         mode='FAN_OUT',
-                                                                                                        uniform=True))
+                                                                                                        uniform=True),reuse=True)
             target_words_vocab = tf.get_variable('TARGET_WORDS_VOCAB',
                                                  shape=(self.target_vocab_size, self.config.EMBEDDINGS_SIZE),
                                                  dtype=tf.float32,
