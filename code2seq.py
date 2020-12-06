@@ -7,6 +7,7 @@ from geneticalgorithm import geneticalgorithm as ga
 from config import Config
 from interactive_predict import InteractivePredictor
 from model import Model
+import 
 
 #################################################
 def evaluate_each_indiv(model,config):
@@ -27,6 +28,63 @@ def evaluate_each_indiv(model,config):
     print("i have finished f111111111yyyyyyyyy")
     #model.close_session()
     return f1, model
+####################################################
+def mymutate(indiv,ind):
+    #va={64,128,256, 512}
+    myTraining_batch_size=[64, 128, 256, 512]
+    myLSTMs_size=[16, 32,64,128,256]
+    #myNumber_of_Decoder_layers: any value
+    #myMax_target_length={1-10}
+    #for i in range(len(indiv)):
+    if ind==0:
+      d1=np.random.randint(0,high=4,dtype=int)
+      indiv[0]=myTraining_batch_size[d1]
+    elif ind==1:
+      b1=np.random.randint(0,high=5,dtype=int)
+      indiv[1]=myLSTMs_size[b1]
+    elif ind==2:
+      indiv[2]=np.random.randint(1,high=4,dtype=int)
+    else: 
+      indiv[3]=np.random.randint(1,high=11,dtype=int)
+    #print(indiv)
+    return indiv
+###############################################################
+def initialize_pop(popsize,n_var):
+    #va={64,128,256, 512}
+    myTraining_batch_size=[64, 128, 256, 512]
+    myLSTMs_size=[16, 32,64,128,256]
+    #myNumber_of_Decoder_layers: any value
+    #myMax_target_length={1-10}
+    pop=[]
+    for i in range(popsize):
+      indiv=[0]*n_var
+      d1=np.random.randint(0,high=4,dtype=int)
+      b1=np.random.randint(0,high=5,dtype=int)
+      indiv[0]=myTraining_batch_size[d1]
+      indiv[1]=myLSTMs_size[b1]
+      indiv[2]=np.random.randint(1,high=4,dtype=int)
+      indiv[3]=np.random.randint(1,high=11,dtype=int)
+      indiv[4]=1#evaluate()
+      pop+=[indiv]
+      #print(indiv)
+    return pop
+##################################################
+def mycross(pop,cross_p,popsize):
+  for i in range(np.math.ceil(popsize/2)):
+    r=np.random.randint(low=0,high=popsize, size=2,dtype=int)#crossover selection for two indivi
+    cpoint=np.random.randint(low=1,high=n_var, size=1,dtype=int)# croxover point
+    temp1=pop[r[0]]
+    temp2=pop[r[1]]
+    temp1[cpoint[0]:]=pop[r[1]][cpoint[0]:]
+    temp2[cpoint[0]:]=pop[r[0]][cpoint[0]:]
+    temp1[n_var]=2
+    temp2[n_var]=4
+    
+    if temp1[n_var]>pop[r[0]][n_var]:
+      pop[r[0]]=temp1
+    if temp2[n_var]>pop[r[1]][n_var]:
+      pop[r[1]]=temp2
+  return pop    
 
 #################################################
 if __name__ == '__main__':
@@ -67,8 +125,9 @@ if __name__ == '__main__':
     
     model = Model(config)
     print("eheeeeeeeeeeeeeeeeeeeeeeee\n")
-    
-    aa,model=evaluate_each_indiv(model,config)
+   
+        
+    aa=evaluate_each_indiv(model,config)
     print("heyyyyyyyyyyyyyyyyy\n")
     print(aa)
     model = Model(config)
