@@ -378,14 +378,13 @@ class Model:
         path_lengths = input_tensors[reader.PATH_LENGTHS_KEY]
         path_target_lengths = input_tensors[reader.PATH_TARGET_LENGTHS_KEY]
 
-        with tf.variable_scope('model'):
+        with tf.variable_scope('model',reuse=True):
             subtoken_vocab = tf.get_variable('SUBTOKENS_VOCAB',
                                              shape=(self.subtoken_vocab_size, self.config.EMBEDDINGS_SIZE),
                                              dtype=tf.float32,
                                              initializer=tf.contrib.layers.variance_scaling_initializer(factor=1.0,
                                                                                                         mode='FAN_OUT',
-                                                                                                        uniform=True,
-                                                                                                        reuse=True))
+                                                                                                        uniform=True))
             target_words_vocab = tf.get_variable('TARGET_WORDS_VOCAB',
                                                  shape=(self.target_vocab_size, self.config.EMBEDDINGS_SIZE),
                                                  dtype=tf.float32,
