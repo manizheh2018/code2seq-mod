@@ -9,16 +9,26 @@ from interactive_predict import InteractivePredictor
 from model import Model
 
 #################################################
-def evaluate_each_indiv(model,config):
+def evaluate_each_indiv(model,config,i):
     print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     #if config.TRAIN_PATH:
-    model.train1()
-    #if args.data_path:
-    results, precision, recall, f1, rouge = model.evaluate()
-    print("i am out of evaluate$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-    print('Accuracy: ' + str(results))
-    print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
-    print('Rouge: ', rouge)
+    if i>0:
+        model.train2()
+        #if args.data_path:
+        results, precision, recall, f1, rouge = model.evaluate()
+        print("i am out of evaluate$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+        print('Accuracy: ' + str(results))
+        print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
+        print('Rouge: ', rouge)
+     else:
+        model.train1()
+        #if args.data_path:
+        results, precision, recall, f1, rouge = model.evaluate()
+        print("i am out of evaluate$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+        print('Accuracy: ' + str(results))
+        print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
+        print('Rouge: ', rouge)
+        
     #if args.predict:
     #    predictor = InteractivePredictor(config, model)
       #  predictor.predict()
@@ -67,7 +77,7 @@ def initialize_pop(popsize,n_var,model,config):
       config.RNN_SIZE =indiv[1]
       config.NUM_DECODER_LAYERS=indiv[2]
       config.MAX_TARGET_PARTS=indiv[3]
-      indiv[4]=evaluate_each_indiv(model,config)
+      indiv[4]=evaluate_each_indiv(model,config,i)
       pop+=[indiv]
       #print(indiv)
     return pop
