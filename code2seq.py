@@ -59,7 +59,7 @@ def mymutate(indiv,ind):
     #print(indiv)
     return indiv
 ###############################################################
-def initialize_pop(popsize,n_var,model,config):
+def initialize_pop(popsize,n_var,config):
     #va={64,128,256, 512}
     myTraining_batch_size=[64, 128, 256, 512]
     myLSTMs_size=[16, 32,64,128,256]
