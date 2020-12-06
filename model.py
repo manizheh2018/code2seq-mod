@@ -384,7 +384,8 @@ class Model:
                                              dtype=tf.float32,
                                              initializer=tf.contrib.layers.variance_scaling_initializer(factor=1.0,
                                                                                                         mode='FAN_OUT',
-                                                                                                        uniform=True),reuse=True)
+                                                                                                        uniform=True,
+                                                                                                        reuse=True))
             target_words_vocab = tf.get_variable('TARGET_WORDS_VOCAB',
                                                  shape=(self.target_vocab_size, self.config.EMBEDDINGS_SIZE),
                                                  dtype=tf.float32,
