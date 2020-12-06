@@ -184,7 +184,7 @@ if __name__ == '__main__':
                 temp=mymutate(pop[j], np.random.randint(4))
                 if temp[n_var]>pop[j][n_var]:
                     pop[j]=temp
-         pop = sorted(pop, key = lambda x:x[n_var-1]) 
+    pop = sorted(pop, key = lambda x:x[n_var-1]) 
     print(pop)
     best=pop[-1]
 
