@@ -26,7 +26,7 @@ def evaluate_each_indiv(model,config):
      #   model.evaluate(release=True)
     print("i have finished f111111111yyyyyyyyy")
     #model.close_session()
-    return f1
+    return f1, model
 
 #################################################
 if __name__ == '__main__':
@@ -68,9 +68,10 @@ if __name__ == '__main__':
     model = Model(config)
     print("eheeeeeeeeeeeeeeeeeeeeeeee\n")
     
-    aa=evaluate_each_indiv(model,config)
+    aa,model=evaluate_each_indiv(model,config)
     print("heyyyyyyyyyyyyyyyyy\n")
     print(aa)
+    model = Model(config)
     print('Created model')
     if config.TRAIN_PATH:
         model.train()
