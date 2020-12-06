@@ -60,6 +60,13 @@ def mymutate(indiv,ind):
      # indiv[2]=np.random.randint(1,high=4,dtype=int)
     else: 
       indiv[2]=np.random.randint(1,high=11,dtype=int)
+      config.BATCH_SIZE=indiv[0]
+      #config.RNN_SIZE =indiv[1]*2
+      config.NUM_EPOCHS =indiv[1]
+      #config.NUM_DECODER_LAYERS=indiv[2]
+      config.MAX_TARGET_PARTS=indiv[2]
+      #model = Model(config)
+      indiv[3]=evaluate_each_indiv(config,1)
     #print(indiv)
     return indiv
 ###############################################################
@@ -94,7 +101,7 @@ def initialize_pop(popsize,n_var,config):
     print("initialization finished")
     return pop
 ##################################################
-def mycross(pop,cross_p,popsize):
+def mycross(pop,cross_p,popsize,n_var):
   for i in range(np.math.ceil(popsize/2)):
     r=np.random.randint(low=0,high=popsize, size=2,dtype=int)#crossover selection for two indivi
     cpoint=np.random.randint(low=1,high=n_var, size=1,dtype=int)# croxover point
@@ -102,8 +109,21 @@ def mycross(pop,cross_p,popsize):
     temp2=pop[r[1]]
     temp1[cpoint[0]:]=pop[r[1]][cpoint[0]:]
     temp2[cpoint[0]:]=pop[r[0]][cpoint[0]:]
-    temp1[n_var]=2
-    temp2[n_var]=4
+    config.BATCH_SIZE=temp1[0]
+      #config.RNN_SIZE =indiv[1]*2
+    config.NUM_EPOCHS =temp1[1]
+      #config.NUM_DECODER_LAYERS=indiv[2]
+    config.MAX_TARGET_PARTS=temp1[2]
+      #model = Model(config)
+   
+    temp1[n_var]=evaluate_each_indiv(config,1)
+    config.BATCH_SIZE=temp2[0]
+      #config.RNN_SIZE =indiv[1]*2
+    config.NUM_EPOCHS =temp2[1]
+      #config.NUM_DECODER_LAYERS=indiv[2]
+    config.MAX_TARGET_PARTS=temp2[2]
+      #model = Model(config)
+    temp2[n_var]=evaluate_each_indiv(config,1)
     
     if temp1[n_var]>pop[r[0]][n_var]:
       pop[r[0]]=temp1
@@ -135,13 +155,13 @@ if __name__ == '__main__':
     tf.set_random_seed(args.seed)
     #tf.random.set_seed(args.seed)
     ############################################################
-    print(args.debug)
+    #print(args.debug)
 
     if args.debug:
         config = Config.get_debug_config(args)
     else:
         config = Config.get_default_config(args)
-    print(config.BATCH_SIZE)
+    #print(config.BATCH_SIZE)
     ###GA
     #varbound=np.array([[0,10]]*3)
     #modelga=ga(function=f,dimension=3,variable_type='real',variable_boundaries=varbound)
@@ -153,15 +173,36 @@ if __name__ == '__main__':
     popsize=3
     pop=initialize_pop(popsize,n_var+1,config)
     print(pop)
-    n_iters=5
-    p_mutate=0.3
-    cross_p=0.7
+    n_iters=4
+    p_mutate=0.8
+    cross_p=0.9
+    for i in range(n_iters):
+        pop=mycross(pop,cross_p,popsize,n_var)# crossover
+        for j in range(popsize):#loop for muration
+            r=np.random.random(1)
+            if r<p_mutate:
+                temp=mymutate(pop[j], np.random.randint(4))
+                if temp[n_var]>pop[j][n_var]:
+                    pop[j]=temp
+         pop = sorted(pop, key = lambda x:x[n_var-1]) 
+    print(pop)
+    best=pop[-1]
+
+    config.BATCH_SIZE=best[0]
+      #config.RNN_SIZE =indiv[1]*2
+    config.NUM_EPOCHS =best[1]
+      #config.NUM_DECODER_LAYERS=indiv[2]
+    config.MAX_TARGET_PARTS=best[2]
+      #model = Model(config)
 
       
     #aa=evaluate_each_indiv(model,config)
     print("heyyyyyyyyyyyyyyyyy I am starting main train\n")
     
     model = Model(config)
+    print("\n************************************* this is the config to train ************************************\n ")
+    print(config.BATCH_SIZE,config.NUM_EPOCHS ,config.MAX_TARGET_PARTS)
+      #model = Model(config)
     print('Created model')
     if config.TRAIN_PATH:
         model.train()
