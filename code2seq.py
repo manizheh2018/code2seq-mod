@@ -170,12 +170,12 @@ if __name__ == '__main__':
 
     pop=[]
     n_var=3#4
-    popsize=3
+    popsize=10
     pop=initialize_pop(popsize,n_var+1,config)
     print(pop)
-    n_iters=4
-    p_mutate=0.8
-    cross_p=0.9
+    n_iters=15
+    p_mutate=0.3
+    cross_p=0.6
     for i in range(n_iters):
         pop=mycross(pop,cross_p,popsize,n_var)# crossover
         for j in range(popsize):#loop for muration
