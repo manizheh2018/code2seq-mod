@@ -49,7 +49,7 @@ def mymutate(indiv,ind):
     #print(indiv)
     return indiv
 ###############################################################
-def initialize_pop(popsize,n_var):
+def initialize_pop(popsize,n_var,model,config):
     #va={64,128,256, 512}
     myTraining_batch_size=[64, 128, 256, 512]
     myLSTMs_size=[16, 32,64,128,256]
@@ -62,9 +62,13 @@ def initialize_pop(popsize,n_var):
       b1=np.random.randint(0,high=5,dtype=int)
       indiv[0]=myTraining_batch_size[d1]
       indiv[1]=myLSTMs_size[b1]
-      indiv[2]=np.random.randint(1,high=4,dtype=int)
-      indiv[3]=np.random.randint(1,high=11,dtype=int)
-      indiv[4]=1#evaluate()
+      indiv[2]=np.random.randint(1,high=3,dtype=int)
+      indiv[3]=np.random.randint(1,high=10,dtype=int)
+      config.BATCH_SIZE=indiv[0]
+      config.RNN_SIZE =indiv[1]
+      config.NUM_DECODER_LAYERS=indiv[2]
+      config.MAX_TARGET_PARTS=indiv[3]
+      indiv[4]=evaluate_each_indiv(model,config)
       pop+=[indiv]
       #print(indiv)
     return pop
@@ -124,12 +128,20 @@ if __name__ == '__main__':
     #############
     
     model = Model(config)
-    print("eheeeeeeeeeeeeeeeeeeeeeeee\n")
+    pop=[]
+    n_var=4
+    popsize=3
+    pop=initialize_pop(popsize,n_var+1,model,config)
+    n_iters=5
+    p_mutate=0.3
+    cross_p=0.7
+
+    
+      
    
-        
-    aa=evaluate_each_indiv(model,config)
+    #aa=evaluate_each_indiv(model,config)
     print("heyyyyyyyyyyyyyyyyy\n")
-    print(aa)
+    print("eheeeeeeeeeeeeeeeeeeeeeeee\n")
     model = Model(config)
     print('Created model')
     if config.TRAIN_PATH:
