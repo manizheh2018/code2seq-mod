@@ -36,7 +36,7 @@ def evaluate_each_indiv(config,i):
    # if args.release and args.load_path:
      #   model.evaluate(release=True)
     print("i have finished f111111111yyyyyyyyy")
-    #model.close_session()
+    model.close_session()
     return f1, model
 ####################################################
 def mymutate(indiv,ind):
