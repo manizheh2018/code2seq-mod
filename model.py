@@ -75,7 +75,7 @@ class Model:
                                           node_to_index=self.node_to_index,
                                           target_to_index=self.target_to_index,
                                           config=self.config)
-       # optimizer, train_loss = self.build_training_graph(self.queue_thread.get_output())
+        optimizer, train_loss = self.build_training_graph1(self.queue_thread.get_output())
         #tf.variable_scope("SUBTOKENS_VOCAB", reuse = tf.AUTO_REUSE)
         self.print_hyperparams()
        # print('Number of trainable params:',
@@ -368,6 +368,73 @@ class Model:
         print(throughput_message)
 
     def build_training_graph(self, input_tensors):
+        target_index = input_tensors[reader.TARGET_INDEX_KEY]
+        target_lengths = input_tensors[reader.TARGET_LENGTH_KEY]
+        path_source_indices = input_tensors[reader.PATH_SOURCE_INDICES_KEY]
+        node_indices = input_tensors[reader.NODE_INDICES_KEY]
+        path_target_indices = input_tensors[reader.PATH_TARGET_INDICES_KEY]
+        valid_context_mask = input_tensors[reader.VALID_CONTEXT_MASK_KEY]
+        path_source_lengths = input_tensors[reader.PATH_SOURCE_LENGTHS_KEY]
+        path_lengths = input_tensors[reader.PATH_LENGTHS_KEY]
+        path_target_lengths = input_tensors[reader.PATH_TARGET_LENGTHS_KEY]
+
+        with tf.variable_scope('model',reuse=True):
+            subtoken_vocab = tf.get_variable('SUBTOKENS_VOCAB',
+                                             shape=(self.subtoken_vocab_size, self.config.EMBEDDINGS_SIZE),
+                                             dtype=tf.float32,
+                                             initializer=tf.contrib.layers.variance_scaling_initializer(factor=1.0,
+                                                                                                        mode='FAN_OUT',
+                                                                                                        uniform=True))
+            target_words_vocab = tf.get_variable('TARGET_WORDS_VOCAB',
+                                                 shape=(self.target_vocab_size, self.config.EMBEDDINGS_SIZE),
+                                                 dtype=tf.float32,
+                                                 initializer=tf.contrib.layers.variance_scaling_initializer(factor=1.0,
+                                                                                                            mode='FAN_OUT',
+                                                                                                            uniform=True))
+            nodes_vocab = tf.get_variable('NODES_VOCAB', shape=(self.nodes_vocab_size, self.config.EMBEDDINGS_SIZE),
+                                          dtype=tf.float32,
+                                          initializer=tf.contrib.layers.variance_scaling_initializer(factor=1.0,
+                                                                                                     mode='FAN_OUT',
+                                                                                                     uniform=True))
+            # (batch, max_contexts, decoder_size)
+            batched_contexts = self.compute_contexts(subtoken_vocab=subtoken_vocab, nodes_vocab=nodes_vocab,
+                                                     source_input=path_source_indices, nodes_input=node_indices,
+                                                     target_input=path_target_indices,
+                                                     valid_mask=valid_context_mask,
+                                                     path_source_lengths=path_source_lengths,
+                                                     path_lengths=path_lengths, path_target_lengths=path_target_lengths)
+
+            batch_size = tf.shape(target_index)[0]
+            outputs, final_states = self.decode_outputs(target_words_vocab=target_words_vocab,
+                                                        target_input=target_index, batch_size=batch_size,
+                                                        batched_contexts=batched_contexts,
+                                                        valid_mask=valid_context_mask)
+            step = tf.Variable(0, trainable=False)
+
+            logits = outputs.rnn_output  # (batch, max_output_length, dim * 2 + rnn_size)
+
+            crossent = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=target_index, logits=logits)
+            target_words_nonzero = tf.sequence_mask(target_lengths + 1,
+                                                    maxlen=self.config.MAX_TARGET_PARTS + 1, dtype=tf.float32)
+            loss = tf.reduce_sum(crossent * target_words_nonzero) / tf.to_float(batch_size)
+
+            if self.config.USE_MOMENTUM:
+                learning_rate = tf.train.exponential_decay(0.01, step * self.config.BATCH_SIZE,
+                                                           self.num_training_examples,
+                                                           0.95, staircase=True)
+                optimizer = tf.train.MomentumOptimizer(learning_rate, 0.95, use_nesterov=True)
+                train_op = optimizer.minimize(loss, global_step=step)
+            else:
+                params = tf.trainable_variables()
+                gradients = tf.gradients(loss, params)
+                clipped_gradients, _ = tf.clip_by_global_norm(gradients, clip_norm=5)
+                optimizer = tf.train.AdamOptimizer()
+                train_op = optimizer.apply_gradients(zip(clipped_gradients, params))
+
+            self.saver = tf.train.Saver(max_to_keep=10)
+
+        return train_op, loss
+    def build_training_graph1(self, input_tensors):
         target_index = input_tensors[reader.TARGET_INDEX_KEY]
         target_lengths = input_tensors[reader.TARGET_LENGTH_KEY]
         path_source_indices = input_tensors[reader.PATH_SOURCE_INDICES_KEY]
