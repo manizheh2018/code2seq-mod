@@ -5,7 +5,7 @@ class Config:
         config.NUM_EPOCHS = 3
         config.SAVE_EVERY_EPOCHS = 1
         config.PATIENCE = 10
-        config.BATCH_SIZE = 512
+        #config.BATCH_SIZE = 512
         config.TEST_BATCH_SIZE = 256
         config.READER_NUM_PARALLEL_BATCHES = 1
         config.SHUFFLE_BUFFER_SIZE = 10000
@@ -14,12 +14,12 @@ class Config:
         config.SUBTOKENS_VOCAB_MAX_SIZE = 190000
         config.TARGET_VOCAB_MAX_SIZE = 27000
         config.EMBEDDINGS_SIZE = 128
-        config.RNN_SIZE = 128 * 2  # Two LSTMs to embed paths, each of size 128
+        #config.RNN_SIZE = 128 * 2  # Two LSTMs to embed paths, each of size 128
         config.DECODER_SIZE = 320
-        config.NUM_DECODER_LAYERS = 1
+        #config.NUM_DECODER_LAYERS = 1
         config.MAX_PATH_LENGTH = 8 + 1
         config.MAX_NAME_PARTS = 5
-        config.MAX_TARGET_PARTS = 6
+        #config.MAX_TARGET_PARTS = 6
         config.EMBEDDINGS_DROPOUT_KEEP_PROB = 0.75
         config.RNN_DROPOUT_KEEP_PROB = 0.5
         config.BIRNN = True
