@@ -11,14 +11,14 @@ from model import Model
 #################################################
 def evaluate_each_indiv(config,i):
     
-    print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+    #print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     #if config.TRAIN_PATH:
     model = Model(config)
     if i>0: #for the case where reuse is True inside GA
         model.train2()
         #if args.data_path:
         results, precision, recall, f1, rouge = model.evaluate()
-        print("i am out of evaluate$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+        #print("i am out of evaluate$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
         print('Accuracy: ' + str(results))
         print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
         print('Rouge: ', rouge)
@@ -26,7 +26,7 @@ def evaluate_each_indiv(config,i):
         model.train1()
         #if args.data_path:
         results, precision, recall, f1, rouge = model.evaluate()
-        print("i am out of evaluate$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+        #print("i am out of evaluate$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
         print('Accuracy: ' + str(results))
         print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
         print('Rouge: ', rouge)
@@ -195,9 +195,29 @@ if __name__ == '__main__':
     config.MAX_TARGET_PARTS=best[2]
       #model = Model(config)
 
-      
+     #def print_hyperparams(self):
+     print('Training batch size:\t\t\t', config.BATCH_SIZE)
+     print('Epochs:\t\t', config.NUM_EPOCHS)
+     print('Max target length:\t\t\t', config.MAX_TARGET_PARTS)
+     print('Dataset path:\t\t\t\t', config.TRAIN_PATH)
+     print('Training file path:\t\t\t', config.TRAIN_PATH + '.train.c2s')
+     print('Validation path:\t\t\t', config.TEST_PATH)
+     print('Taking max contexts from each example:\t', config.MAX_CONTEXTS)
+     print('Random path sampling:\t\t\t', config.RANDOM_CONTEXTS)
+     print('Embedding size:\t\t\t\t', config.EMBEDDINGS_SIZE)
+     if config.BIRNN:
+        print('Using BiLSTMs, each of size:\t\t', config.RNN_SIZE // 2)
+     else:
+        print('Uni-directional LSTM of size:\t\t', config.RNN_SIZE)
+     print('Decoder size:\t\t\t\t', config.DECODER_SIZE)
+     print('Decoder layers:\t\t\t\t', config.NUM_DECODER_LAYERS)
+     print('Max path lengths:\t\t\t', config.MAX_PATH_LENGTH)
+     print('Max subtokens in a token:\t\t', config.MAX_NAME_PARTS)
+     print('Embeddings dropout keep_prob:\t\t', config.EMBEDDINGS_DROPOUT_KEEP_PROB)
+     print('LSTM dropout keep_prob:\t\t\t', config.RNN_DROPOUT_KEEP_PROB)
+     print('============================================') 
     #aa=evaluate_each_indiv(model,config)
-    print("heyyyyyyyyyyyyyyyyy I am starting main train\n")
+    #print("heyyyyyyyyyyyyyyyyy I am starting main train\n")
     
     model = Model(config)
     print("\n************************************* this is the config to train ************************************\n ")
