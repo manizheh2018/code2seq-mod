@@ -77,18 +77,18 @@ class Model:
                                           config=self.config)
         optimizer, train_loss = self.build_training_graph(self.queue_thread.get_output())
         self.print_hyperparams()
-        print('Number of trainable params:',
-              np.sum([np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()]))
+       # print('Number of trainable params:',
+          #    np.sum([np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()]))
         self.initialize_session_variables(self.sess)
-        print('Initalized variables')
-        if self.config.LOAD_PATH:
-            self.load_model(self.sess)
+        #print('Initalized variables')
+        #if self.config.LOAD_PATH:
+          #  self.load_model(self.sess)
 
         
 
-        if self.config.SAVE_PATH:
-            self.save_model(self.sess, self.config.SAVE_PATH + '.final')
-            print('Model saved in file: %s' % self.config.SAVE_PATH)
+        #if self.config.SAVE_PATH:
+         #   self.save_model(self.sess, self.config.SAVE_PATH + '.final')
+         #   print('Model saved in file: %s' % self.config.SAVE_PATH)
 
         elapsed = int(time.time() - start_time)
         print("Training time: %sh%sm%ss\n" % ((elapsed // 60 // 60), (elapsed // 60) % 60, elapsed % 60))
