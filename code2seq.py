@@ -7,7 +7,6 @@ from geneticalgorithm import geneticalgorithm as ga
 from config import Config
 from interactive_predict import InteractivePredictor
 from model import Model
-import 
 
 #################################################
 def evaluate_each_indiv(model,config):
