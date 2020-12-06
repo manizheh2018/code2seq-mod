@@ -20,7 +20,7 @@ def evaluate_each_indiv(model,config,i):
         print('Accuracy: ' + str(results))
         print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
         print('Rouge: ', rouge)
-     else:
+    else:
         model.train1()
         #if args.data_path:
         results, precision, recall, f1, rouge = model.evaluate()
