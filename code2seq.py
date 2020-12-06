@@ -24,9 +24,9 @@ def evaluate_each_indiv(model,config):
       #  predictor.predict()
    # if args.release and args.load_path:
      #   model.evaluate(release=True)
-    print("i have finished Accuracyyyyyyyyy")
-    model.close_session()
-    return results
+    print("i have finished f111111111yyyyyyyyy")
+    #model.close_session()
+    return f1
 
 #################################################
 if __name__ == '__main__':
