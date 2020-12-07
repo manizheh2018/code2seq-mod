@@ -36,7 +36,7 @@ def evaluate_each_indiv(config,i):
       #  predictor.predict()
    # if args.release and args.load_path:
      #   model.evaluate(release=True)
-    print("i have finished f111111111yyyyyyyyy")
+   # print("i have finished f111111111yyyyyyyyy")
     model.close_session()
     return f1
 ####################################################
@@ -170,10 +170,10 @@ if __name__ == '__main__':
 
     pop=[]
     n_var=3#4
-    popsize=10
+    popsize=5
     pop=initialize_pop(popsize,n_var+1,config)
     print(pop)
-    n_iters=15
+    n_iters=7
     p_mutate=0.3
     cross_p=0.6
     for i in range(n_iters):
