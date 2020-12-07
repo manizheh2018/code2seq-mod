@@ -357,27 +357,25 @@ class Model:
         return true_positive, false_positive, false_negative
 
     def print_hyperparams(self):
-        print()
-     #   print('Training batch size:\t\t\t', self.config.BATCH_SIZE)
-     #   print('Dataset path:\t\t\t\t', self.config.TRAIN_PATH)
-      #  print('Training file path:\t\t\t', self.config.TRAIN_PATH + '.train.c2s')
-       # print('Validation path:\t\t\t', self.config.TEST_PATH)
-     #   print('Taking max contexts from each example:\t', self.config.MAX_CONTEXTS)
-      #  print('Random path sampling:\t\t\t', self.config.RANDOM_CONTEXTS)
-       # print('Embedding size:\t\t\t\t', self.config.EMBEDDINGS_SIZE)
-        #if self.config.BIRNN:
-      #      print('Using BiLSTMs, each of size:\t\t', self.config.RNN_SIZE // 2)
-       # else:
-        #    print('Uni-directional LSTM of size:\t\t', self.config.RNN_SIZE)
-      #  print('Decoder size:\t\t\t\t', self.config.DECODER_SIZE)
-       # print('Decoder layers:\t\t\t\t', self.config.NUM_DECODER_LAYERS)
-        #print('Max path lengths:\t\t\t', self.config.MAX_PATH_LENGTH)
-    #    print('Max subtokens in a token:\t\t', self.config.MAX_NAME_PARTS)
-     #   print('Epochs:\t\t', self.config.NUM_EPOCHS)
-      #  print('Max target length:\t\t\t', self.config.MAX_TARGET_PARTS)
-       # print('Embeddings dropout keep_prob:\t\t', self.config.EMBEDDINGS_DROPOUT_KEEP_PROB)
-     #   print('LSTM dropout keep_prob:\t\t\t', self.config.RNN_DROPOUT_KEEP_PROB)
-       # print('============================================')
+        print('Training batch size:\t\t\t', self.config.BATCH_SIZE)
+        print('Dataset path:\t\t\t\t', self.config.TRAIN_PATH)
+        print('Training file path:\t\t\t', self.config.TRAIN_PATH + '.train.c2s')
+        print('Validation path:\t\t\t', self.config.TEST_PATH)
+        print('Taking max contexts from each example:\t', self.config.MAX_CONTEXTS)
+        print('Random path sampling:\t\t\t', self.config.RANDOM_CONTEXTS)
+        print('Embedding size:\t\t\t\t', self.config.EMBEDDINGS_SIZE)
+        if self.config.BIRNN:
+            print('Using BiLSTMs, each of size:\t\t', self.config.RNN_SIZE // 2)
+        else:
+            print('Uni-directional LSTM of size:\t\t', self.config.RNN_SIZE)
+        print('Decoder size:\t\t\t\t', self.config.DECODER_SIZE)
+        print('Decoder layers:\t\t\t\t', self.config.NUM_DECODER_LAYERS)
+        print('Max path lengths:\t\t\t', self.config.MAX_PATH_LENGTH)
+        print('Max subtokens in a token:\t\t', self.config.MAX_NAME_PARTS)
+        print('Max target length:\t\t\t', self.config.MAX_TARGET_PARTS)
+        print('Embeddings dropout keep_prob:\t\t', self.config.EMBEDDINGS_DROPOUT_KEEP_PROB)
+        print('LSTM dropout keep_prob:\t\t\t', self.config.RNN_DROPOUT_KEEP_PROB)
+        print('============================================')
 
     @staticmethod
     def calculate_results(true_positive, false_positive, false_negative):
