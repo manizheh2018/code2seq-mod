@@ -7,111 +7,51 @@ import tensorflow as tf
 from config import Config
 from interactive_predict import InteractivePredictor
 from model import Model
+##-----------------------------------------------------from SMAC ------------------------------
+import logging
 
-#################################################
-def evaluate_each_indiv(config,i):
+import numpy as np
+from ConfigSpace.conditions import InCondition
+from ConfigSpace.hyperparameters import CategoricalHyperparameter, \
+    UniformFloatHyperparameter, UniformIntegerHyperparameter
+from sklearn import svm, datasets
+from sklearn.model_selection import cross_val_score
+
+# Import ConfigSpace and different types of parameters
+from smac.configspace import ConfigurationSpace
+from smac.facade.smac_hpo_facade import SMAC4HPO
+# Import SMAC-utilities
+from smac.scenario.scenario import Scenario
+# --------------------------------------------------------------
+import os
+import sys
+
+def mysmac_from_cfg(cfg,i):
     
-    #print("i am in evaluate_ga$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-    #if config.TRAIN_PATH:
+    # For deactivated parameters, the configuration stores None-values.
+    # This is not accepted by the SVM, so we remove them.
+    cfg = {k: cfg[k] for k in cfg if cfg[k]}
+    # We translate boolean values:
+    #cfg["shrinking"] = True if cfg["shrinking"] == "true" else False
+    # And for gamma, we set it to a fixed value or to "auto" (if used)
+    #if "gamma" in cfg:
+      #  cfg["gamma"] = cfg["gamma_value"] if cfg["gamma"] == "value" else "auto"
+     #   cfg.pop("gamma_value", None)  # Remove "gamma_value"
+
+#    clf = svm.SVC(**cfg, random_state=42)
+    config.BATCH_SIZE = cfg['BATCH_SIZE']
+    config.NUM_EPOCHS = cfg['NUM_EPOCHS']
+    config.MAX_TARGET_PARTS = cfg['MAX_TARGET_PARTS']   
     model = Model(config)
     if i>0: #for the case where reuse is True inside GA
         model.train2()
-        #if args.data_path:
         results, precision, recall, f1, rouge = model.evaluate()
-       # print("i am out of evaluate$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        print('Accuracy: ' + str(results))
-        print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
-        print('Rouge: ', rouge)
+
     else:#for the case where reuse is False inside GA-first indiv
         model.train1()
-        #if args.data_path:
         results, precision, recall, f1, rouge = model.evaluate()
-       # print("i am out of evaluate$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        print('Accuracy: ' + str(results))
-        print('Precision: ' + str(precision) + ', recall: ' + str(recall) + ', F1: ' + str(f1))
-        print('Rouge: ', rouge)
-        
-    #if args.predict:
-    #    predictor = InteractivePredictor(config, model)
-      #  predictor.predict()
-   # if args.release and args.load_path:
-     #   model.evaluate(release=True)
-    print("i have finished f111111111yyyyyyyyy")
-    model.close_session()
     return f1
-####################################################
-def mymutate(indiv,ind):
-    #va={64,128,256, 512}
-    myNUM_EPOCHS=[3,4,5,6,7,8]
-    myTraining_batch_size=[64, 128, 256, 512]
-    myLSTMs_size=[16, 32,64,128,256]
-    #myNumber_of_Decoder_layers: any value
-    #myMax_target_length={1-10}
-    #for i in range(len(indiv)):
-    
-    if ind==0:
-      d1=np.random.randint(0,high=4,dtype=int)
-      indiv[0]=myTraining_batch_size[d1]
-    elif ind==1:
-      b1=np.random.randint(0,high=6,dtype=int)
-      #indiv[1]=myLSTMs_size[b1]
-      indiv[1]=myNUM_EPOCHS[b1]
-    #elif ind==2:
-     # indiv[2]=np.random.randint(1,high=4,dtype=int)
-    else: 
-      indiv[2]=np.random.randint(1,high=11,dtype=int)
-    #print(indiv)
-    return indiv
-###############################################################
-def initialize_pop(popsize,n_var,config):
-    #va={64,128,256, 512}
-    myTraining_batch_size=[64, 128, 256, 512]
-    myLSTMs_size=[16, 32,64,128,256]
-    myNUM_EPOCHS=[3,4,5,6,7,8]
-    #myNumber_of_Decoder_layers: any value
-    #myMax_target_length={1-10}
-    pop=[]
-    for i in range(popsize):
-      
-      indiv=[0]*n_var
-      d1=np.random.randint(0,high=4,dtype=int)
-      b1=np.random.randint(0,high=6,dtype=int)
-      indiv[0]=myTraining_batch_size[d1]
-      #indiv[1]=myLSTMs_size[b1]
-      indiv[1]=myNUM_EPOCHS[b1]
-      indiv[2]=np.random.randint(1,high=10,dtype=int)#myMax_target_length
-      #indiv[3]=np.random.randint(1,high=10,dtype=int)
-      config.BATCH_SIZE=indiv[0]
-      #config.RNN_SIZE =indiv[1]*2
-      config.NUM_EPOCHS =indiv[1]
-      #config.NUM_DECODER_LAYERS=indiv[2]
-      config.MAX_TARGET_PARTS=indiv[2]
-      #model = Model(config)
-      indiv[3]=evaluate_each_indiv(config,i)
-      
-      pop+=[indiv]
-      #model.close_session()
-    print("initialization finished")
-    return pop
-##################################################
-def mycross(pop,cross_p,popsize):
-  for i in range(np.math.ceil(popsize/2)):
-    r=np.random.randint(low=0,high=popsize, size=2,dtype=int)#crossover selection for two indivi
-    cpoint=np.random.randint(low=1,high=n_var, size=1,dtype=int)# croxover point
-    temp1=pop[r[0]]
-    temp2=pop[r[1]]
-    temp1[cpoint[0]:]=pop[r[1]][cpoint[0]:]
-    temp2[cpoint[0]:]=pop[r[0]][cpoint[0]:]
-    temp1[n_var]=2
-    temp2[n_var]=4
-    
-    if temp1[n_var]>pop[r[0]][n_var]:
-      pop[r[0]]=temp1
-    if temp2[n_var]>pop[r[1]][n_var]:
-      pop[r[1]]=temp2
-  return pop    
 
-#################################################
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument("-d", "--data", dest="data_path",
@@ -133,35 +73,125 @@ if __name__ == '__main__':
 
     np.random.seed(args.seed)
     tf.set_random_seed(args.seed)
-    #tf.random.set_seed(args.seed)
-    ############################################################
-    print(args.debug)
-
     if args.debug:
         config = Config.get_debug_config(args)
     else:
         config = Config.get_default_config(args)
-    print(config.BATCH_SIZE)
-    ###GA
-    #varbound=np.array([[0,10]]*3)
-    #modelga=ga(function=f,dimension=3,variable_type='real',variable_boundaries=varbound)
-    #modelga.run()
-    #############
+    
+    
+   # print(config.load_path)
+    ##########################SMAC##############################
+    # logger = logging.getLogger("SVMExample")
+    logging.basicConfig(level=logging.INFO)  # logging.DEBUG for debug output
 
-    pop=[]
-    n_var=3#4
-    popsize=5
-    #pop=initialize_pop(popsize,n_var+1,config)
-    print(pop)
-    n_iters=10
-    p_mutate=0.3
-    cross_p=0.7
+    # Build Configuration Space which defines all parameters and their ranges
+    cs = ConfigurationSpace()
+    BATCH_SIZE=UniformIntegerHyperparameter('BATCH_SIZE', 128, 512, default_value=128) 
+    print("dash bashuvaaaaaaaaaaaaaaaaaaaaaaa")   
+    NUM_EPOCHS =UniformIntegerHyperparameter("NUM_EPOCHS", 7, 11, default_value=7)
+    MAX_TARGET_PARTS=UniformIntegerHyperparameter("MAX_TARGET_PARTS", 6, 11, default_value=6)
+    cs.add_hyperparameters([BATCH_SIZE,NUM_EPOCHS,MAX_TARGET_PARTS])
+    # We define a few possible types of SVM-kernels and add them as "kernel" to our cs
+    #kernel = CategoricalHyperparameter("kernel", ["linear", "rbf", "poly", "sigmoid"], default_value="poly")
+    #cs.add_hyperparameter(kernel)
+    # Scenario object
+    ############################--------------------------------------------
+#     config.SAVE_EVERY_EPOCHS = 1
+#     config.PATIENCE = 10
+#     config.TEST_BATCH_SIZE = 256
+#     config.READER_NUM_PARALLEL_BATCHES = 1
+#     config.SHUFFLE_BUFFER_SIZE = 10000
+#     config.CSV_BUFFER_SIZE = 100 * 1024 * 1024  # 100 MB
+#     config.MAX_CONTEXTS = 200
+#     config.SUBTOKENS_VOCAB_MAX_SIZE = 190000
+#     config.TARGET_VOCAB_MAX_SIZE = 27000
+#     config.EMBEDDINGS_SIZE = 128
+#     config.RNN_SIZE = 128 * 2  # Two LSTMs to embed paths, each of size 128
+#     config.DECODER_SIZE = 320
+#     config.NUM_DECODER_LAYERS = 1
+#     config.MAX_PATH_LENGTH = 8 + 1
+#     config.MAX_NAME_PARTS = 5
+#     config.MAX_TARGET_PARTS = 6
+#     config.EMBEDDINGS_DROPOUT_KEEP_PROB = 0.75
+#     config.RNN_DROPOUT_KEEP_PROB = 0.5
+#     config.BIRNN = True
+#     config.RANDOM_CONTEXTS = True
+#     config.BEAM_WIDTH = 0
+#     config.USE_MOMENTUM = True
+#     config.TRAIN_PATH = args.data_path
+#     config.TEST_PATH = args.test_path if args.test_path is not None else ''
+#     config.DATA_NUM_CONTEXTS = 0
+#     config.SAVE_PATH = args.save_path_prefix
+#     config.LOAD_PATH = args.load_path
+#     config.RELEASE = args.release
+    ###################
+    scenario = Scenario({"run_obj": "quality",  # we optimize quality (alternatively runtime)
+                         "runcount-limit": 5,  # max. number of function evaluations; for this example set to a low number
+                         "cs": cs,  # configuration space
+                         "deterministic": "true"
+                         })
 
-      
+    # Example call of the function
+    # It returns: Status, Cost, Runtime, Additional Infos
+    def_value = mysmac_from_cfg(cs.get_default_configuration(),0)
+    print("Default Value: %.2f" % (def_value))
+
+    # Optimize, using a SMAC-object
+    print("Optimizing! Depending on your machine, this might take a few minutes.")
+    smac = SMAC4HPO(scenario=scenario, rng=np.random.RandomState(42),
+                    tae_runner=mysmac_from_cfg)
+
+    incumbent = smac.optimize()
+
+    inc_value = mysmac_from_cfg(incumbent,2)
+
+    print("Optimized Value: %.2f" % (inc_value))
+
+    # We can also validate our results (though this makes a lot more sense with instances)
+    smac.validate(config_mode='inc',  # We can choose which configurations to evaluate
+                  # instance_mode='train+test',  # Defines what instances to validate
+                  repetitions=3,  # Ignored, unless you set "deterministic" to "false" in line 95
+                  n_jobs=1)  # How many cores to use in parallel for optimization
+    
+
+    
+
+   ##########################SMAC------end---------------##############################
+#     config.BATCH_SIZE=best[0]
+#       #config.RNN_SIZE =indiv[1]*2
+#     config.NUM_EPOCHS =best[1]
+#       #config.NUM_DECODER_LAYERS=indiv[2]
+#     config.MAX_TARGET_PARTS=best[2]
+      #model = Model(config)
+
+     #def print_hyperparams(self):
+    print('Training batch size:\t\t\t', config.BATCH_SIZE)
+    print('Epochs:\t\t', config.NUM_EPOCHS)
+    print('Max target length:\t\t\t', config.MAX_TARGET_PARTS)
+    print('Dataset path:\t\t\t\t', config.TRAIN_PATH)
+    print('Training file path:\t\t\t', config.TRAIN_PATH + '.train.c2s')
+    print('Validation path:\t\t\t', config.TEST_PATH)
+    print('Taking max contexts from each example:\t', config.MAX_CONTEXTS)
+    print('Random path sampling:\t\t\t', config.RANDOM_CONTEXTS)
+    print('Embedding size:\t\t\t\t', config.EMBEDDINGS_SIZE)
+    if config.BIRNN:
+        print('Using BiLSTMs, each of size:\t\t', config.RNN_SIZE // 2)
+    else:
+        print('Uni-directional LSTM of size:\t\t', config.RNN_SIZE)
+    print('Decoder size:\t\t\t\t', config.DECODER_SIZE)
+    print('Decoder layers:\t\t\t\t', config.NUM_DECODER_LAYERS)
+    print('Max path lengths:\t\t\t', config.MAX_PATH_LENGTH)
+    print('Max subtokens in a token:\t\t', config.MAX_NAME_PARTS)
+    print('Embeddings dropout keep_prob:\t\t', config.EMBEDDINGS_DROPOUT_KEEP_PROB)
+    print('LSTM dropout keep_prob:\t\t\t', config.RNN_DROPOUT_KEEP_PROB)
+    print('============================================') 
     #aa=evaluate_each_indiv(model,config)
-    print("heyyyyyyyyyyyyyyyyy I am starting main train\n")
+    #print("heyyyyyyyyyyyyyyyyy I am starting main train\n")
     
     model = Model(config)
+    print("\n************************************* this is the config to train ************************************\n ")
+    print(config.BATCH_SIZE,config.NUM_EPOCHS ,config.MAX_TARGET_PARTS)
+      #model = Model(config)
     print('Created model')
     if config.TRAIN_PATH:
         model.train()
@@ -176,4 +206,3 @@ if __name__ == '__main__':
     if args.release and args.load_path:
         model.evaluate(release=True)
     model.close_session()
-
